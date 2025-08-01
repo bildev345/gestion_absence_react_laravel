@@ -1,24 +1,28 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../features/auth/authThunks";
+import { cn } from "../lib/utilis";
+import { Form, redirect, useActionData, useLoaderData, useNavigation } from "react-router-dom";
+
+export const loader = ({request}) => {
+  return new URL(request.url).searchParams.get("message");
+}
+
+export const action = async({request}) => {
+  
+  const formData = await request.formData();
+  const email = formData.get("email");
+  const password = formData.get("password");
+  const pathname = new URL(request.url).searchParams.get("redirectTo") || "/formateur";
+  if(email === "bilal@gmail.com" && password === "214222"){
+      localStorage.setItem("isloggedin", true);
+      return redirect(pathname); 
+  }else{
+      return "Invalid credentiels";
+  }
+}
 
 export const Login = () => {
-  const dispatch  = useDispatch();
-  const {user, token, status, error} = useSelector(state => state.auth);  
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  useEffect(() => {
-    console.log('user', user);
-    console.log('Token', token);
-    console.log('Status', status);
-    console.log('Error', error);
-  }, [status])
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(loginUser({email : email, password : password}));
-  };
+  const loaderMsg = useLoaderData();
+  const {state} = useNavigation();
+  const errorMsg = useActionData();
 
   return (
     <>
@@ -28,8 +32,15 @@ export const Login = () => {
             Login
           </h2>
         </div>
+        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+            {loaderMsg &&
+                <h4 className="mt-3 text-center text-2xl/9 font-bold tracking-tight text-red-500">
+                  {loaderMsg}
+                </h4>
+            }
+        </div>
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <Form method="post" className="space-y-6">
             <div>
               <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900">
                 Email address
@@ -39,7 +50,6 @@ export const Login = () => {
                   id="email"
                   name="email"
                   type="email"
-                  onChange={(e) => setEmail(e.target.value)}
                   className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                 />
               </div>
@@ -61,25 +71,28 @@ export const Login = () => {
                   id="password"
                   name="password"
                   type="password"
-                  onChange={(e) => setPassword(e.target.value)}
                   autoComplete="current-password"
                   className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                 />
               </div>
             </div>
-
             <div>
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                disabled = {state === "submitting"}
+                className={cn(
+                    "flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs",
+                    state === "submitting" ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-indigo-600 text-white hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                )}
               >
-                Se connecter
+                {state === "submitting" ? 'connexion en cours...' : 'Se connecter'}
               </button>
             </div>
-            <div>{error?._error && (<div className="text-red-500 font-semibold">{error._error}</div>)}</div>
-          </form>
+            {<div>{errorMsg && (<div className="text-center text-red-500 font-semibold">{errorMsg}</div>)}</div>}
+          </Form>
           <p className="mt-10 text-center text-sm/6 text-gray-500">
-            Not a member?{' '}
+            N'est pas un membre?{' '}
             <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
               S'inscrire
             </a>

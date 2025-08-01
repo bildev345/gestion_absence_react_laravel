@@ -7,6 +7,7 @@ const token = localStorage.getItem('token');
 const initialState = {
   user: null,
   token: token || null,
+  isAuthenticated : false,
   status: 'idle',
   error: null,
 };
@@ -25,12 +26,14 @@ const authSlice = createSlice({
         state.status = 'succeeded';
         state.user = payload.user;
         state.token = payload.token;
+        state.isAuthenticated = true;
         localStorage.setItem('token', payload.token);
         state.error = null;
       })
       .addCase(authThunks.loginUser.rejected, (state, { payload }) => {
         state.status = 'failed';
         state.error = payload;
+        state.isAuthenticated = false;
       })
 
       .addCase(authThunks.registerUser.pending, state => {
@@ -41,12 +44,14 @@ const authSlice = createSlice({
         state.status = 'succeeded';
         state.user = payload.user;
         state.token = payload.token;
+        state.isAuthenticated = true;
         localStorage.setItem('token', payload.token);
         state.error = null;
       })
       .addCase(authThunks.registerUser.rejected, (state, { payload }) => {
         state.status = 'failed';
         state.error = payload;
+        state.isAuthenticated = false;
       })
 
       .addCase(logout, state => {
@@ -55,6 +60,7 @@ const authSlice = createSlice({
         state.token = null;
         state.status = 'idle';
         state.error = null;
+        state.isAuthenticated = false;
       });
   },
 });

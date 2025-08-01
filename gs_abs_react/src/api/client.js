@@ -21,7 +21,6 @@ client.interceptors.response.use(
         const {status} = err.response || {};
         if (status === 401) {
             storeRef?.dispatch(logout());
-            window.location.href = '/login';
         }
         if (status === 403) {
             window.location.href = '/unauthorized';

@@ -1,24 +1,28 @@
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../features/auth/authThunks";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const Register = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const {user, token, status, error} = useSelector(state => state.auth);
     const [nom, setNom] = useState("");
     const [prenom, setPrenom] = useState("");
     const [email, setEmail] = useState("");
     const [role, setRole] = useState("");
     const [password, setPassword] = useState("");
-    const [confirmation, setConfirmation] = useState("");
+    const [password_confirmation, setConfirmation] = useState("");
     
     useEffect(() => {
-      console.log(status);
+        if(user && status === "succeeded"){
+          navigate('/formateur');
+        }
     }, [status])
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(registerUser({nom : nom, prenom : prenom, email : email, role : role, password : password, password_confirmation : confirmation }));
+        dispatch(registerUser({nom, prenom, email, role, password, password_confirmation}));
     }
     return (
         

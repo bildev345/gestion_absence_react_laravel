@@ -13,7 +13,7 @@ export const loginUser = createAsyncThunk(
       }
       if(err.response?.status === 401) {
         return rejectWithValue({
-          _error : err.response.data?.error || 'Invalid crdentiels'
+          _error : err.response.data?.error || 'Invalid credentiels'
         })
       }
       return rejectWithValue({ _error: 'Login failed' });
