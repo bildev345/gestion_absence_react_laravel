@@ -1,7 +1,7 @@
 import { Login, loader as loginLoader, action as loginAction } from "../pages/Login";
 import { Home } from "../pages/Home";
 import { GuestLayout } from "../components/GuestLayout";
-import { Register } from "../pages/Register";
+import { Register, action as registerAction } from "../pages/Register";
 import { FormateurLayout } from "../components/Formateur/FormateurLayout";
 import { FormateurDashboard } from "../pages/Formateur/FormateurDashboard";
 import { FaireAbsence } from "../pages/Formateur/FaireAbsence";
@@ -32,7 +32,8 @@ export const routes = [
            },
            {
                 path : "register",
-                element : <Register/>
+                element : <Register/>,
+                action : registerAction
            },
        ]  
     },
