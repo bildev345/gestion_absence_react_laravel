@@ -1,17 +1,23 @@
-import { Form } from "react-router-dom";
+import { Form, useNavigation } from "react-router-dom";
 import { registerUser } from "../features/auth/authThunks";
+import { cn } from "../lib/utilis";
 
 export const action = async({request}) => {
+
   const formData = await request.formData();
-  console.log(formData);
+  let user = {};
+  for(let [key, value] of formData){
+    user = {...user, [key] : value}
+  }
+  console.log(user);
   return null;
 }
 export const Register = () => {
+    const {state} = useNavigation();
     return (
-        
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Créer un compte</h2>
+        <h2 className="mt-5 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Créer un compte</h2>
       </div>
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <Form method="post" className="space-y-6" replace>
@@ -64,7 +70,17 @@ export const Register = () => {
                   </div>
               </div>
               <div className="mt-5">
-                <button type="submit" className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">S'inscrire</button>
+                <button
+                    type="submit"
+                    disabled = {state === "submitting"}
+                    className={cn(
+                        "flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs",
+                        state === "submitting" ? "bg-gray-400 cursor-not-allowed"
+                        : "bg-indigo-600 text-white hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    )}
+                  >
+                    {state === "submitting" ? 'souscription en cours...' : "S'inscrire"}
+                </button>
               </div>
           </Form>
       </div>
