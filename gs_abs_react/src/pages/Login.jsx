@@ -1,9 +1,31 @@
+import { loginUser } from "../api/api";
 import { cn } from "../lib/utilis";
-import { Form, redirect, useActionData, useLoaderData, useNavigation } from "react-router-dom";
+import { 
+  Form,
+  redirect,
+  useActionData, 
+  useLoaderData, 
+  useNavigation, 
+  Link 
+} from "react-router-dom";
 
 export const loader = ({request}) => {
   return new URL(request.url).searchParams.get("message");
 }
+const surveillantRoutes = [
+    "/surveillant", 
+    "/surveillant/listeAbs",
+    "/surveillant/affecter",
+    "/surveillant/listeAff",
+    "/surveillant/listeGr",
+    "/surveillant/listeSt"
+];
+const FormateurRoutes = [
+    "/formateur",
+    "/formateur/faireAbs",
+    "/formateur/groupesAffectes"
+];
+
 
 export const action = async({request}) => {
   
@@ -11,19 +33,23 @@ export const action = async({request}) => {
   const email = formData.get("email");
   const password = formData.get("password");
   const pathname = new URL(request.url).searchParams.get("redirectTo") || "/formateur";
-  if(email === "bilal@gmail.com" && password === "214222"){
-      localStorage.setItem("isloggedin", true);
-      return redirect(pathname); 
-  }else{
-      return "Invalid credentiels";
+  try{
+     const data = await loginUser({email, password});
+     //if(!surveillantRoutes.includes(pathname) )
+     localStorage.setItem('token', data.token);
+     localStorage.setItem('user', JSON.stringify(data.user));
+     return redirect(pathname);
+  }catch(err){
+    console.log(err);
   }
+  return null;
 }
 
 export const Login = () => {
   const loaderMsg = useLoaderData();
   const {state} = useNavigation();
   const errorMsg = useActionData();
-
+  console.log(state);
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -93,9 +119,9 @@ export const Login = () => {
           </Form>
           <p className="mt-10 text-center text-sm/6 text-gray-500">
             N'est pas un membre?{' '}
-            <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
+            <Link href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
               S'inscrire
-            </a>
+            </Link>
           </p>
         </div>
       </div>

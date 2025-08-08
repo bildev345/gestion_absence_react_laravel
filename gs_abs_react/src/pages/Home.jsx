@@ -1,7 +1,8 @@
+import LandingBack from "../assets/landing page background.webp"
 export const Home = () => {
     return (
         <div>
-            <h1>Hello from Home</h1>
+            <img src={LandingBack} alt="landing page" />
         </div>
     )
 }

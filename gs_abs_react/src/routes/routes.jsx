@@ -1,19 +1,19 @@
 import { Login, loader as loginLoader, action as loginAction } from "../pages/Login";
 import { Home } from "../pages/Home";
 import { GuestLayout } from "../components/GuestLayout";
-import { Register, action as registerAction } from "../pages/Register";
-import { FormateurLayout } from "../components/Formateur/FormateurLayout";
+import { FormateurLayout, loader as formateurLoader } from "../components/Formateur/FormateurLayout";
 import { FormateurDashboard } from "../pages/Formateur/FormateurDashboard";
 import { FaireAbsence } from "../pages/Formateur/FaireAbsence";
 import { GroupesAffectes } from "../pages/Formateur/GroupesAffectes";
-import { SurveillantLayout } from "../components/Surveillant/SurveillantLayout";
+import { SurveillantLayout, loader as surveillantLoader } from "../components/Surveillant/SurveillantLayout";
 import { SurveillantDashboard } from "../pages/Surveillant/SurveillantDashboard";
 import { Affecter} from "../pages/Surveillant/Affecter";
 import { ListeAbsences } from "../pages/Surveillant/ListeAbsences";
 import { ListeAffectations } from "../pages/Surveillant/ListeAffectations";
 import { ListeGroupes } from "../pages/Surveillant/ListeGroupes";
 import { ListeStagiaires } from "../pages/Surveillant/ListeStagiaires";
-import { checkAuth } from "../lib/utilis";
+import { Unauthorized } from "../pages/Unauthorized";
+import { NotFound } from "../pages/NotFound";
 
 export const routes = [
     {
@@ -30,17 +30,12 @@ export const routes = [
                 loader : loginLoader,
                 action : loginAction,
            },
-           {
-                path : "register",
-                element : <Register/>,
-                action : registerAction
-           },
        ]  
     },
     {
         path : "/formateur",
         element : <FormateurLayout/>,
-        loader : checkAuth,
+        loader : formateurLoader,
         children : [
             {
                 index : true,
@@ -59,7 +54,7 @@ export const routes = [
     {
         path : "/surveillant",
         element : <SurveillantLayout/>,
-        loader : checkAuth,
+        loader : surveillantLoader,
         children : [
             {
                 index : true,
@@ -87,5 +82,13 @@ export const routes = [
             }
         ]
 
+    },
+    {
+        path : "/unauthorized",
+        element : <Unauthorized/>
+    },
+    {
+        path : "/notFound",
+        element : <NotFound/>
     }
 ]

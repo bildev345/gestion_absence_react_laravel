@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller {
+  /*
   public function register(Request $req) {
     $data = $req->validate([
       'nom' => 'required|max:255',
@@ -25,13 +26,14 @@ class AuthController extends Controller {
        'role.in' => 'le role doit etre soit surveillant soit formateur',
        'password.required' => 'le mot de passe est obligatoire',
        'password.confirmed' => 'les mots de passe ne sont pas identiques',
-
-    ]);
-    $data['password'] = Hash::make($data['password']);
-    $user = User::create($data);
-    $token = $user->createToken($req->nom)->plainTextToken;
-    return response()->json(compact('user','token'));
-  }
+       
+      ]);
+      $data['password'] = Hash::make($data['password']);
+      $user = User::create($data);
+      $token = $user->createToken($req->nom)->plainTextToken;
+      return response()->json(compact('user','token'));
+    }
+  */
 
   public function login(Request $req) {
     $credentiels = $req->only('email','password');

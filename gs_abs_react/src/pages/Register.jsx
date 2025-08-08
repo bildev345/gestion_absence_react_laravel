@@ -1,5 +1,5 @@
 import { Form, useNavigation } from "react-router-dom";
-import { registerUser } from "../features/auth/authThunks";
+//import { registerUser } from "../features/auth/authThunks";
 import { cn } from "../lib/utilis";
 
 export const action = async({request}) => {
