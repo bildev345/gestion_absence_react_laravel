@@ -1,4 +1,4 @@
-import { Login, loader as loginLoader, action as loginAction } from "../pages/Login";
+import { Login, loader as loginLoader, action as loginAction, loader } from "../pages/Login";
 import { Home } from "../pages/Home";
 import { GuestLayout } from "../components/GuestLayout";
 import { FormateurLayout, loader as formateurLoader } from "../components/Formateur/FormateurLayout";
@@ -14,6 +14,8 @@ import { ListeGroupes } from "../pages/Surveillant/ListeGroupes";
 import { ListeStagiaires } from "../pages/Surveillant/ListeStagiaires";
 import { Unauthorized } from "../pages/Unauthorized";
 import { NotFound } from "../pages/NotFound";
+import { Settings } from "../pages/Settings";
+import { checkAuth } from "../lib/utilis";
 
 export const routes = [
     {

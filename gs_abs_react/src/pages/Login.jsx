@@ -12,44 +12,27 @@ import {
 export const loader = ({request}) => {
   return new URL(request.url).searchParams.get("message");
 }
-const surveillantRoutes = [
-    "/surveillant", 
-    "/surveillant/listeAbs",
-    "/surveillant/affecter",
-    "/surveillant/listeAff",
-    "/surveillant/listeGr",
-    "/surveillant/listeSt"
-];
-const FormateurRoutes = [
-    "/formateur",
-    "/formateur/faireAbs",
-    "/formateur/groupesAffectes"
-];
-
 
 export const action = async({request}) => {
-  
   const formData = await request.formData();
   const email = formData.get("email");
   const password = formData.get("password");
-  const pathname = new URL(request.url).searchParams.get("redirectTo") || "/formateur";
   try{
      const data = await loginUser({email, password});
-     //if(!surveillantRoutes.includes(pathname) )
+     const pathname = new URL(request.url).searchParams.get("redirectTo") || `/${data.user.role}`;
      localStorage.setItem('token', data.token);
      localStorage.setItem('user', JSON.stringify(data.user));
-     return redirect(pathname);
+     return redirect(pathname);  
   }catch(err){
-    console.log(err);
+    return err.message
   }
-  return null;
 }
 
 export const Login = () => {
   const loaderMsg = useLoaderData();
   const {state} = useNavigation();
   const errorMsg = useActionData();
-  console.log(state);
+
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -66,7 +49,7 @@ export const Login = () => {
             }
         </div>
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <Form method="post" className="space-y-6">
+          <Form method="post" className="space-y-6" replace>
             <div>
               <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900">
                 Email address
@@ -117,12 +100,6 @@ export const Login = () => {
             </div>
             {<div>{errorMsg && (<div className="text-center text-red-500 font-semibold">{errorMsg}</div>)}</div>}
           </Form>
-          <p className="mt-10 text-center text-sm/6 text-gray-500">
-            N'est pas un membre?{' '}
-            <Link href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-              S'inscrire
-            </Link>
-          </p>
         </div>
       </div>
     </>

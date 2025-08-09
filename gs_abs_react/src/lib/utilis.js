@@ -17,7 +17,6 @@ export const checkAuth = (request, role) => {
     if(role !== user.role) {
         throw redirect("/unauthorized");
     }
-    // à revoir
     return {user, token};
 }
 
