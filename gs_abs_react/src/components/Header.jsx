@@ -1,10 +1,12 @@
 import { Link, NavLink } from "react-router-dom";
 import { cn } from "../lib/utilis";
 import ImgLogo from "../assets/logo1.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearUser } from "../features/authSlice";
-export const Header = () => {
+import { Menu } from "lucide-react";
+
+export const Header = ({setSidebarOpen}) => {
   const dispatch = useDispatch();
   const { user, token, isAuthenticated } = useSelector(
     (state) => state.authUser
@@ -24,19 +26,29 @@ export const Header = () => {
     setIsDropdownOpen(!isDropdownOpen);
   }
   const logout = () => {
-    localStorage.clear();
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
     dispatch(clearUser());
     closeMenu();
   }
+  
   return (
-    <nav className="bg-white border-gray-200 dark:bg-gray-900 border-b-1 shadow-2xs relative">
-      <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <Link
-          to="."
-          className="flex items-center space-x-3 rtl:space-x-reverse"
-        >
-          <img src={ImgLogo} className="h-10" alt="gs-abs" />
-        </Link>
+    <nav className="sticky top-0 z-10 bg-white dark:bg-gray-800 shadow-md">
+      <div className="flex items-center justify-between p-4">
+        <div className="flex items-center spac-x-4">
+          <button
+            className="md:hidden text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-100"
+            onClick={() => setSidebarOpen(true)}
+          >
+            <Menu className="h-6 w-6" />
+          </button>
+          <Link
+            to="."
+            className="flex items-center space-x-3 rtl:space-x-reverse"
+            >
+            <img src={ImgLogo} className="h-10" alt="gs-abs" />
+          </Link>
+        </div>
         <button
           onClick={toggleMenu}
           data-collapse-toggle="navbar-default"
@@ -136,7 +148,7 @@ export const Header = () => {
                       </li>
                       <li>
                         <Link
-                          to="/settings"
+                          to="settings"
                           className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                         >
                           Settings

@@ -50,6 +50,10 @@ export const routes = [
             {
                 path : "groupesAffectes",
                 element : <GroupesAffectes/>
+            },
+            {
+                path : "settings",
+                element : <Settings/>
             }
         ]
     },
@@ -63,15 +67,11 @@ export const routes = [
                 element : <SurveillantDashboard/>
             },
             {
-                path : "affecter",
-                element : <Affecter/>
-            },
-            {
                 path : "listeAbs",
                 element : <ListeAbsences/>
             },
             {
-                path : "listeAff",
+                path : "affectation",
                 element : <ListeAffectations/>
             },
             {
@@ -81,6 +81,10 @@ export const routes = [
             {
                 path : "listeSt",
                 element : <ListeStagiaires/>
+            },
+            {
+                path : "settings",
+                element : <Settings/>
             }
         ]
 

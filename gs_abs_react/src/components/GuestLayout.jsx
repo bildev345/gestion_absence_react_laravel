@@ -4,7 +4,7 @@ import {Footer} from "./Footer";
 
 export const GuestLayout = () => {
     return (
-        <div className="flex flex-col min-h-dvh">
+        <div className="flex flex-col min-h-screen">
             <Header/>
             <main>
                 <Outlet/>
