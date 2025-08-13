@@ -7,15 +7,15 @@ import { FaireAbsence } from "../pages/Formateur/FaireAbsence";
 import { GroupesAffectes } from "../pages/Formateur/GroupesAffectes";
 import { SurveillantLayout, loader as surveillantLoader } from "../components/Surveillant/SurveillantLayout";
 import { SurveillantDashboard } from "../pages/Surveillant/SurveillantDashboard";
-import { Affecter} from "../pages/Surveillant/Affecter";
 import { ListeAbsences } from "../pages/Surveillant/ListeAbsences";
 import { ListeAffectations } from "../pages/Surveillant/ListeAffectations";
 import { ListeGroupes } from "../pages/Surveillant/ListeGroupes";
-import { ListeStagiaires } from "../pages/Surveillant/ListeStagiaires";
+import { StagiairesLayout } from "../components/Surveillant/StagiaireLayout/StagiaireLayout";
 import { Unauthorized } from "../pages/Unauthorized";
 import { NotFound } from "../pages/NotFound";
 import { Settings } from "../pages/Settings";
-import { checkAuth } from "../lib/utilis";
+import { ListeStagiaires } from "../pages/Surveillant/Stagiaire/ListeStagiaires";
+import { ImportStgs } from "../pages/Surveillant/Stagiaire/ImporterStgs";
 
 export const routes = [
     {
@@ -79,8 +79,18 @@ export const routes = [
                 element : <ListeGroupes/>
             },
             {
-                path : "listeSt",
-                element : <ListeStagiaires/>
+                path : "stagiaire",
+                element : <StagiairesLayout/>,
+                children : [
+                    {
+                        index : true,
+                        element : <ListeStagiaires/>
+                    },
+                    {
+                        path : "importer",
+                        element : <ImportStgs/>
+                    }
+                ]
             },
             {
                 path : "settings",

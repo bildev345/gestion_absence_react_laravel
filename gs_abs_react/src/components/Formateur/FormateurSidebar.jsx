@@ -42,7 +42,6 @@ export const FormateurSidebar = ({sidebarOpen, setSidebarOpen}) => {
                                 "hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors",
                                 `${isActive ? "bg-gray-100 dark:bg-gray-700 font-bold text-gray-800 dark:text-gray-300" : null}`
                               )}
-                  end            
                 >
                   Absence
                 </NavLink>

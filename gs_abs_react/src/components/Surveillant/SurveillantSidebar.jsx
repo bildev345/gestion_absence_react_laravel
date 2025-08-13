@@ -42,7 +42,6 @@ export const SurveillantSidebar = ({sidebarOpen, setSidebarOpen}) => {
                                 "hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors",
                                 `${isActive ? "bg-gray-100 dark:bg-gray-700 font-bold text-gray-800 dark:text-gray-300" : null}`
                               )}
-                  end            
                 >
                   Absence
                 </NavLink>
@@ -55,7 +54,6 @@ export const SurveillantSidebar = ({sidebarOpen, setSidebarOpen}) => {
                                 "hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors",
                                 `${isActive ? "bg-gray-100 dark:bg-gray-700 font-bold text-gray-800 dark:text-gray-300" : null}`
                               )}
-                  end            
                 >
                   Affectation
                 </NavLink>
@@ -68,20 +66,18 @@ export const SurveillantSidebar = ({sidebarOpen, setSidebarOpen}) => {
                                 "hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors",
                                 `${isActive ? "bg-gray-100 dark:bg-gray-700 font-bold text-gray-800 dark:text-gray-300" : null}`
                               )}
-                  end            
                 >
                   Groupes
                 </NavLink>
               </li>
               <li>
                 <NavLink
-                  to='listeSt'
+                  to='stagiaire'
                   className={({isActive})=>cn(
                                 "block px-4 py-2 rounded-md text-gray-700 dark:text-gray-200",
                                 "hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors",
                                 `${isActive ? "bg-gray-100 dark:bg-gray-700 font-bold text-gray-800 dark:text-gray-300" : null}`
                               )}
-                  end            
                 >
                   Stagiaires
                 </NavLink>
