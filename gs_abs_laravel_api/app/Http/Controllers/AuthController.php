@@ -1,13 +1,12 @@
 <?php
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller {
 
-  public function login(Request $req) {
+  public function login(Request $req) 
+  {
     $credentiels = $req->only('email','password');
     if(!Auth::attempt($credentiels)){
        return response()->json([
@@ -17,5 +16,11 @@ class AuthController extends Controller {
     $user = Auth::user();
     $token = $user->createToken($user->nom)->plainTextToken;
     return response()->json(compact('user','token'));
+  }
+
+  public function logout(Request $req)
+  {
+    $req->user()->tokens()->delete();
+    return response()->noContent();
   }
 }

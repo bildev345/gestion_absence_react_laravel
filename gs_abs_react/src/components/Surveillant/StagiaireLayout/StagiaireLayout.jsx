@@ -30,9 +30,9 @@ export const StagiairesLayout = () => {
             Importer
           </NavLink>
         </nav>
-        <button className="dark:bg-gray-200 dark:text-gray-800 dark:border hover:font-[600] dark:hover:font-[600] dark:border-gray-200 dark:hover:bg-gray-50 cursor-pointer border border-gray-400 hover:border-gray-600 px-4 py-1 rounded-lg hover:bg-gray-50 text-gray-700 hover:text-gray-800 transition-all duration-300">
+        <a href="/src/assets/structure-example.xlsx" className="dark:bg-gray-200 dark:text-gray-800 dark:border hover:font-[600] dark:hover:font-[600] dark:border-gray-200 dark:hover:bg-gray-50 cursor-pointer border border-gray-400 hover:border-gray-600 px-4 py-1 rounded-lg hover:bg-gray-50 text-gray-700 hover:text-gray-800 transition-all duration-300">
           Example
-        </button>
+        </a>
       </div>
       <div className="bg-white dark:bg-gray-800 p-2 rounded-lg mt-3">
         <Outlet />

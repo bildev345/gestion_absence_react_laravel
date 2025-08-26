@@ -15,7 +15,9 @@ import { Unauthorized } from "../pages/Unauthorized";
 import { NotFound } from "../pages/NotFound";
 import { Settings } from "../pages/Settings";
 import { ListeStagiaires } from "../pages/Surveillant/Stagiaire/ListeStagiaires";
+import { StagiaireDetail } from "../pages/Surveillant/Stagiaire/stagiaireDetail";
 import { ImportStgs } from "../pages/Surveillant/Stagiaire/ImporterStgs";
+import { AjouterStagiaire } from "../pages/Surveillant/Stagiaire/AjouterStagiaire";
 
 export const routes = [
     {
@@ -79,7 +81,7 @@ export const routes = [
                 element : <ListeGroupes/>
             },
             {
-                path : "stagiaire",
+                path : "stagiaires",
                 element : <StagiairesLayout/>,
                 children : [
                     {
@@ -91,6 +93,14 @@ export const routes = [
                         element : <ImportStgs/>
                     }
                 ]
+            },
+            {
+                path : "stagiaires/:id",
+                element : <StagiaireDetail/>
+            },
+            {
+                path : "stagiaires/ajouter",
+                element : <AjouterStagiaire/>
             },
             {
                 path : "settings",

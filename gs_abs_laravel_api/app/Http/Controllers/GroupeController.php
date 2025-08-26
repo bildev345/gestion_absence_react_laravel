@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Groupe;
 use Illuminate\Http\Request;
 
 class GroupeController extends Controller
@@ -11,7 +12,10 @@ class GroupeController extends Controller
      */
     public function index()
     {
-        //
+        $groupes = Groupe::all();
+        return response()->json([
+            'groupes' => $groupes
+        ]);
     }
 
     /**

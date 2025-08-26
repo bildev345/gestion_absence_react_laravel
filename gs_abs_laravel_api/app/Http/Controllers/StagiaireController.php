@@ -7,6 +7,7 @@ use App\Models\Stagiaire;
 use App\Http\Requests\StoreStagiaireRequest;
 use App\Http\Requests\UpdateStagiaireRequest;
 use App\Models\Groupe;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -17,9 +18,32 @@ class StagiaireController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        //$paramsArray = $request->input();
+        $query = Stagiaire::query();
+        //Recherche
+        if($request->has('search')){
+            $query->where('nom', 'like', $request->search.'%')
+            ->orWhere('prenom', 'like', $request->search.'%'); 
+        }
+
+        //Filter
+        if($request->has('autorise')){
+            $query->where('autorise', $request->autorise);
+        }else if($request->has('groupe_id')){
+            $query->where('groupe_id', $request->groupe_id);
+        }
+
+        //Tri
+        /*$sortColumn = $request->input('sort_by', 'nom');
+        $sortDirection = $request->input('sort_dir', 'asc');
+        $query->orderBy($sortColumn, $sortDirection);*/
+        
+        //pagination
+        $perPage = $request->input('per_page', 25);
+        return $query->paginate($perPage);
+ 
     }
 
     /**
@@ -27,15 +51,35 @@ class StagiaireController extends Controller
      */
     public function store(StoreStagiaireRequest $request)
     {
-        //
+        $stagiaire = Stagiaire::create($request->all());
+        if($stagiaire){
+            return response()->json([
+                'message' => 'le stagiaire à été crée avec succés.',
+                'stagiaire' => $stagiaire
+            ]);
+        }
+        return response()->json([
+            'errors' => [
+                'message' => 'Une erreur survenue lors de la création d\'un nouveau stagiaire.'
+            ]
+        ], 500);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Stagiaire $stagiaire)
+    public function show($id)
     {
-        //
+        $stagiaire = Stagiaire::find($id);
+        if($stagiaire){
+            return response()->json([
+                'stagiaire' => $stagiaire
+            ]);
+        }else{
+            return response()->json([
+                'message' => 'Aucun stagiaire trouvé'
+            ], 500);
+        }
     }
 
     /**
@@ -93,7 +137,6 @@ class StagiaireController extends Controller
                         "prenom" => $row[2],
                         "date_naissance" => $dateNaissance,
                         "groupe_id" => $groupe->id,
-                        "created_by" => Auth::id()
                         ]
                 );
                 }

@@ -2,15 +2,12 @@ import { Link, NavLink } from "react-router-dom";
 import { cn } from "../lib/utilis";
 import ImgLogo from "../assets/logo1.png";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { clearUser } from "../features/authSlice";
 import { Menu } from "lucide-react";
+import { useUserContext } from "../contexts/UserContext";
+import { logoutUser } from "../api/auth";
 
 export const Header = ({setSidebarOpen}) => {
-  const dispatch = useDispatch();
-  const { user, token, isAuthenticated } = useSelector(
-    (state) => state.authUser
-  );
+  const {user, authenticated, setAuthenticated, setUser, setToken} = useUserContext();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const activeStyles = {
@@ -25,10 +22,12 @@ export const Header = ({setSidebarOpen}) => {
   const openDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   }
-  const logout = () => {
-    localStorage.removeItem("user");
+  const handleLogout = async () => {
+    await logoutUser();
     localStorage.removeItem("token");
-    dispatch(clearUser());
+    setAuthenticated(false);
+    setUser(null);
+    setToken("");
     closeMenu();
   }
   
@@ -39,6 +38,7 @@ export const Header = ({setSidebarOpen}) => {
           <button
             className="md:hidden text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-100"
             onClick={() => setSidebarOpen(true)}
+            hidden = {!authenticated}
           >
             <Menu className="h-6 w-6" />
           </button>
@@ -99,7 +99,7 @@ export const Header = ({setSidebarOpen}) => {
             )}
           >
             <li>
-              {isAuthenticated ? (
+              {authenticated ? (
                 <div className="relative">
                   <button
                     id="dropdownDividerButton"
@@ -158,7 +158,7 @@ export const Header = ({setSidebarOpen}) => {
                     <div className="py-2">
                       <Link
                         to=".."
-                        onClick={logout}
+                        onClick={handleLogout}
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                       >
                         Logout

@@ -26,12 +26,9 @@ export const ImportStgs = () => {
         const error = await response.json();
         throw new Error(error.message || `HTTP error! status ${response.status}`)
       }
-      console.log(response);
       const result = await response.json();
       setSuccess(result.message);
-      console.log(result);
     } catch (err) {
-      console.log("Upload failed:", err);
       setError(err.message);
     } finally {
       setLoading(false);

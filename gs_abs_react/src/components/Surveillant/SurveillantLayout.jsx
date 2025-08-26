@@ -2,23 +2,23 @@ import { Outlet, useLoaderData } from 'react-router-dom';
 import { Footer } from '../Footer';
 import { checkAuth } from '../../lib/utilis';
 import { useEffect, useState } from 'react';
-import {useDispatch} from 'react-redux';
-import { loadUser } from '../../features/authSlice';
 import { Header } from '../Header';
 import { SurveillantSidebar } from './SurveillantSidebar';
+import {useUserContext } from '../../contexts/UserContext';
 
 export const loader = ({request}) => {
     return checkAuth(request , "surveillant");
 }
 export const SurveillantLayout = () => {
+    const {setUser, setToken, setAuthenticated} = useUserContext();
     const {user, token} = useLoaderData();
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const dispatch = useDispatch();
     useEffect(() => {
        if(user && token){
-          dispatch(loadUser({user, token}))
+          setUser(user);
+          setAuthenticated(true);
        }
-    }, [user, token, dispatch])
+    }, [user, token])
 
 
     return (

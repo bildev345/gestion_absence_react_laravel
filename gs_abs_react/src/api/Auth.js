@@ -16,3 +16,20 @@ export const loginUser = async (credentiels) => {
     }
     return data;
 }
+export const logoutUser = async () => {
+    return await fetch('/api/logout', {
+        method : 'POST',
+        headers : {
+            Authorization : `Bearer ${localStorage.getItem('token')}`
+        }
+    });
+}
+
+export const getUser = async () => {
+    const response = await fetch('/api/user', {
+        headers : {
+            Authorization : `Bearer ${localStorage.getItem('token')}`
+        }
+    });
+    return await response.json();
+}

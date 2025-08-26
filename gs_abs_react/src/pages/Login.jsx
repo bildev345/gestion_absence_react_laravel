@@ -1,4 +1,4 @@
-import { loginUser } from "../api/api";
+import { loginUser } from "../api/auth";
 import { cn } from "../lib/utilis";
 import { 
   Form,
@@ -6,7 +6,6 @@ import {
   useActionData, 
   useLoaderData, 
   useNavigation, 
-  Link 
 } from "react-router-dom";
 
 export const loader = ({request}) => {
@@ -21,7 +20,7 @@ export const action = async({request}) => {
      const data = await loginUser({email, password});
      const pathname = new URL(request.url).searchParams.get("redirectTo") || `/${data.user.role}`;
      localStorage.setItem('token', data.token);
-     localStorage.setItem('user', JSON.stringify(data.user));
+     //localStorage.setItem('user', JSON.stringify(data.user));
      return redirect(pathname);  
   }catch(err){
     return err.message
