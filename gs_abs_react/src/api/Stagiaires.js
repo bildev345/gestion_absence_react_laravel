@@ -1,19 +1,3 @@
-/*export const getAllStagiaires = async () => {
-    const response = await fetch('/api/stagiaires', {
-        headers : {
-            Authorization : `Bearer ${localStorage.getItem('token')}`
-        }
-    });
-    const data = await response.json();
-    if(!response.ok){
-        throw {
-            message : data.message,
-            statusText : response.statusText,
-            status: response.status
-        }
-    }
-    return data;
-}*/
 export const fetchStagiaires = async({page, perPage, search}, filters) => {
     const params = new URLSearchParams({
         page,
@@ -35,8 +19,6 @@ export const fetchStagiaires = async({page, perPage, search}, filters) => {
         throw new Error('Network error');
     }
     return response.json();
-
-
 }
 export const getStagiaire = async (id) => {
     const response = await fetch(`/api/stagiaires/${id}`, {
@@ -73,4 +55,22 @@ export const addStagiaire = async (stagiaire) => {
         }
     }
     return data;
+}
+
+export const deleteStagiaire = async (id) => {
+    const response = await fetch(`/api/stagiaires/${id}`, {
+        method : 'DELETE',
+        headers : {
+            Authorization : `Bearer ${localStorage.getItem('token')}`
+        }
+    });
+    const data = await response.json();
+    if(!response.ok){
+        throw {
+            message : data.error,
+            statusText : response.statusText,
+            status : response.status
+        }
+    }
+    return data.message;
 }

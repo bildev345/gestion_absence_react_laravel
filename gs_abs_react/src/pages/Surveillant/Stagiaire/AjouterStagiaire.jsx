@@ -1,52 +1,35 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { getAllGroupes } from "../../../api/Groupe";
+import { fetchGroupes } from "../../../api/Groupe";
 import { addStagiaire } from "../../../api/Stagiaires";
 import {cn} from '../../../lib/utilis.js';
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const AjouterStagiaire = () => {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const {data} = useQuery({
+  const {data : groupes} = useQuery({
     queryKey : ['groupes'],
-    queryFn : getAllGroupes,
+    queryFn : fetchGroupes,
     staleTime : 10000,
     gcTime : 20000,
     refetchOnWindowFocus : false
   });
 
-  const {data : responseData, mutate, isSuccess, error, status} = useMutation({
-    mutationFn : addStagiaire,
-    // implement optimistic update(update the UI before the response get back from the server)
-    onMutate : async(newStagiaire) => {
-      // cancel any outgoing refetches
-      await queryClient.cancelQueries({queryKey : ['stagiaires']});
-      // we create prevData so we can access through the context below
-      const prevStagiaires = queryClient.getQueryData(['stagiaires']) || [];
-      // manually set the new Stagiaire
-      const optimisticStagiaire = {
-        ...newStagiaire,
-        id : `temp-${Date.now()}`,
-        isOptimistic : true
-      };
-      queryClient.setQueryData(['stagiaires'], (old) => [...old, optimisticStagiaire]);
-      
-      // the returned value(s) will be accessible through context
-      return {prevStagiaires, optimisticStagiaire};
-    },
-    // rollback incase there was an error
-    onError : (err, stagiaire, context) => {
-      if(context?.prevStagiaires){
-        queryClient.setQueryData(["stagiaires"], context.prevStagiaires)
-      }
-    },
-    onSuccess : (data, variables, context) => {
-      //replacing optimistic stagiaire with the real one
-      queryClient.setQueryData(['stagiaires'], (old) => (
-        old?.map(item => item.id === context.optimisticStagiaire.id ? data.stagiaire : item)))
-    },
-    onSettled : () => {
-      queryClient.invalidateQueries({queryKey : ['stagiaires']})
+  const {
+    data: responseData,
+    mutate,
+    error,
+    isPending,
+  } = useMutation({
+    mutationFn: addStagiaire,
+    onSuccess: (data) => {
+      console.log(data);
+      queryClient.invalidateQueries({queryKey : ['stagiaires']});
+      navigate("..", {
+        relative : "path",
+        state : data.message,
+      });  
     }
   });
   
@@ -56,7 +39,7 @@ export const AjouterStagiaire = () => {
     nom : '',
     prenom : '',
     date_naissance : '',
-    groupe_id : data?.groupes[0]?.id || ''
+    groupe_id : groupes?.[0].id || ''
   });
 
 
@@ -71,13 +54,8 @@ export const AjouterStagiaire = () => {
       }
     });
   }
-
-  if(isSuccess){
-    return <Navigate 
-            state={responseData.message}
-            to=".." 
-            relative="path"
-          />
+  if(error){
+     console.log(error.message);
   }
     return (
     <div className="p-6 max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md">
@@ -192,7 +170,7 @@ export const AjouterStagiaire = () => {
             onChange={handleChange}
             required
           >
-            {data?.groupes.map(groupe => (
+            {groupes?.map(groupe => (
               <option key={groupe.id} value={groupe.id}>
                 {groupe.intitule}
               </option>
@@ -209,13 +187,13 @@ export const AjouterStagiaire = () => {
           type="submit"
           className={cn(
             "w-full py-3 px-4 font-bold rounded-lg transition-colors",
-            status === "pending" 
+            isPending
               ? "bg-blue-400 dark:bg-blue-500 text-white cursor-not-allowed" 
               : "bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white focus:ring-4 focus:ring-blue-300 focus:outline-none"
           )}
-          disabled={status === "pending"}
+          disabled={isPending}
         >
-          {status === "pending" ? "Création en cours..." : "Créer le stagiaire"}
+          {isPending ? "Création en cours..." : "Créer le stagiaire"}
         </button>
       </form>
     </div>

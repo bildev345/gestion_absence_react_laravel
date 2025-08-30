@@ -41,8 +41,8 @@ class StagiaireController extends Controller
         $query->orderBy($sortColumn, $sortDirection);*/
         
         //pagination
-        $perPage = $request->input('per_page', 25);
-        return $query->paginate($perPage);
+        $perPage = $request->input('per_page', 10);
+        return $query->with('groupe')->paginate($perPage);
  
     }
 
@@ -55,7 +55,6 @@ class StagiaireController extends Controller
         if($stagiaire){
             return response()->json([
                 'message' => 'le stagiaire à été crée avec succés.',
-                'stagiaire' => $stagiaire
             ]);
         }
         return response()->json([
@@ -93,9 +92,16 @@ class StagiaireController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Stagiaire $stagiaire)
+    public function destroy($id)
     {
-        //
+        if(Stagiaire::destroy($id)){
+            return response()->json([
+                'message' => 'stagiaire est supprimé avec succès'
+            ]);
+        }
+        return response()->json([
+            'error' => 'Erreur survenue lors de la suppression'
+        ], 500);
     }
 
     public function import(ImportStagiairesRequest $request)

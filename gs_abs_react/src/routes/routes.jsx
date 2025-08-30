@@ -8,7 +8,7 @@ import { GroupesAffectes } from "../pages/Formateur/GroupesAffectes";
 import { SurveillantLayout, loader as surveillantLoader } from "../components/Surveillant/SurveillantLayout";
 import { SurveillantDashboard } from "../pages/Surveillant/SurveillantDashboard";
 import { ListeAbsences } from "../pages/Surveillant/ListeAbsences";
-import { ListeAffectations } from "../pages/Surveillant/ListeAffectations";
+import { ListeAffectations } from "../pages/Surveillant/Affectation/ListeAffectations";
 import { ListeGroupes } from "../pages/Surveillant/ListeGroupes";
 import { StagiairesLayout } from "../components/Surveillant/StagiaireLayout/StagiaireLayout";
 import { Unauthorized } from "../pages/Unauthorized";
@@ -18,6 +18,8 @@ import { ListeStagiaires } from "../pages/Surveillant/Stagiaire/ListeStagiaires"
 import { StagiaireDetail } from "../pages/Surveillant/Stagiaire/stagiaireDetail";
 import { ImportStgs } from "../pages/Surveillant/Stagiaire/ImporterStgs";
 import { AjouterStagiaire } from "../pages/Surveillant/Stagiaire/AjouterStagiaire";
+import { AffectationLayout } from "../components/Surveillant/AffectationLayout/AffectationLayout";
+import { Affecter } from "../pages/Surveillant/Affectation/Affecter";
 
 export const routes = [
     {
@@ -74,7 +76,17 @@ export const routes = [
             },
             {
                 path : "affectation",
-                element : <ListeAffectations/>
+                element : <AffectationLayout/>,
+                children : [
+                    {
+                        index : true,
+                        element : <ListeAffectations/>
+                    },
+                    {
+                        path : "affecter",
+                        element : <Affecter/>
+                    }
+                ]
             },
             {
                 path : "listeGr",
