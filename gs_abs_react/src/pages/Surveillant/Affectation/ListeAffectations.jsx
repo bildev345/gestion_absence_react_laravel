@@ -183,6 +183,7 @@ export const ListeAffectations = () => {
             <Pagination
               responseData={responseData}
               setPagination={setPagination}
+              isSmall = {false}
             />
           </>
         ) : (

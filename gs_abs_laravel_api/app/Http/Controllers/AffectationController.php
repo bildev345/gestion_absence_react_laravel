@@ -6,6 +6,8 @@ use App\Models\Affectation;
 use App\Http\Requests\StoreAffectationRequest;
 use App\Http\Requests\UpdateAffectationRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AffectationController extends Controller
 {
@@ -43,9 +45,25 @@ class AffectationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreAffectationRequest $request)
+    public function store(Request $request)
     {
-        //
+        $affectations = $request->input();
+        DB::beginTransaction();
+        try {
+            foreach($affectations as $affectation){
+                Affectation::create([
+                    "created_by" => Auth::id(),
+                    "formateur_id" => $affectation["formateur_id"],
+                    "groupe_id" => $affectation["groupe_id"]
+                ]);
+            }
+            DB::commit();
+            return response()->json(['success' => 'Les affectations sont faites avec succès.']);
+        }catch(\Exception $e){
+            DB::rollBack();
+            return response()->json(['error' => 'Une ou plusieurs affectations sont déjà actives!!!'], 500);
+        }
+        
     }
 
     /**

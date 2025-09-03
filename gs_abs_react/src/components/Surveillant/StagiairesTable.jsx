@@ -211,7 +211,7 @@ export const StagiairesTable = () => {
           </tbody>
         </table>
       </div>
-      <Pagination responseData={responseData} setPagination={setPagination}/>
+      <Pagination responseData={responseData} setPagination={setPagination} isSmall={false}/>
     </div>
   );
 };

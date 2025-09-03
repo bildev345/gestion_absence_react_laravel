@@ -20,3 +20,24 @@ export const fetchAffectations = async({page, perPage, search}, filters) => {
     }
     return response.json();
 }
+
+export const addAffectations = async(affectationsData) => {
+    const response = await fetch('/api/affectations', {
+        method : 'POST',
+        headers : {
+            Authorization : `Bearer ${localStorage.getItem('token')}`,
+            "Content-Type" : "application/json"
+        },
+        body : JSON.stringify(affectationsData)
+    });
+    const responseData = await response.json();
+    if(!response.ok){
+        throw {
+            message : responseData.error,
+            statusText : response.statusText,
+            status : response.status
+        }
+    }
+    return responseData;
+
+}
